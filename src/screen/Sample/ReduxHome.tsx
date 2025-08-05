@@ -26,6 +26,28 @@ function SampleUI() {
         onChangeText={setInput}
       />
 
+      <Button
+        title="Store Text"
+        onPress={() => dispatch(storeSampleText(input))}
+      />
+      <View style={styles.spacer} />
+      <Button
+        title="Reset Text"
+        onPress={() => {
+          dispatch(clearSampleReducerState());
+          setInput('');
+        }}
+      />
+
+      <Text style={styles.output}>Current Value: {test}</Text>
+
+      <Button
+        title="Go to Dummy Screen"
+        onPress={() => {
+          //@ts-ignore
+          navigation.navigate('Dummy');
+        }}
+      />
     </View>
   );
 }

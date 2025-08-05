@@ -1,21 +1,45 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+import { ActivityIndicator, StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
 import Navigation from './src/screen/Navigation';
+import { StyleProvider } from './src/screen/onboarding/hooks/styles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useEffect } from 'react';
+import { StorageKey } from './src/utils/StorageKey';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
+  const [onboarded, setOnboarded] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
+   // -------------------- EFFECTS -------------------- //
+  useEffect(() => {
+    getStorage();
+  }, []);
+
+  // -------------------- ACTIONS -------------------- //
+  const getStorage = async () => {
+    const onboarded = await AsyncStorage.getItem(StorageKey.ONBOARDED) || 'false';
+    setOnboarded(JSON.parse(onboarded));
+    setIsLoading(false);
+  };
+  
+  if (isLoading) {
+    return (
+      <StyleProvider>
+        <View style={styles.container}>
+          <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+           <ActivityIndicator size="large" />
+        </View>
+      </StyleProvider>
+    );
+  }
+  
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <Navigation />
-    </View>
+    <StyleProvider>
+      <View style={styles.container}>
+        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+        <Navigation onboarded={onboarded}/>
+      </View>
+    </StyleProvider>
   );
 }
 
