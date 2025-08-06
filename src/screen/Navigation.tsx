@@ -3,6 +3,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import SampleUI from './Home/Home';
 import DummyUI from './Sample/Sample';
+import ChatScreen from './ChatScreen/ChatScreen';
+import SettingsScreen from './Settings/SettingsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,8 +15,12 @@ const AppNavigator = () => {
       component: SampleUI,
     },
     {
-      name: 'Dummy',
-      component: DummyUI,
+      name: 'Chat',
+      component: ChatScreen,
+    },
+    {
+      name: 'Settings',
+      component: SettingsScreen,
     },
   ];
   return (

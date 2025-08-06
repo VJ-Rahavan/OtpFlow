@@ -1,85 +1,140 @@
-// App.js
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import React, { useMemo, useState } from 'react';
 import {
-  storeSampleText,
-  clearSampleReducerState,
-} from '../../redux/reducers/SampleReducer';
-import { RootState } from '../../redux/store';
+  FlatList,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+} from 'react-native';
+import ChatListItem from './ChatListItem';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import HeaderWithSearch from './Header';
+import { selectChat } from '../../redux/reducers/ChatReducer';
+import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 
-function SampleUI() {
+type ChatItem = {
+  id: string;
+  name: string;
+  icon: string;
+  isEnabled: boolean;
+};
+
+const initialData: ChatItem[] = [
+  {
+    id: '1',
+    name: 'Team React',
+    icon: 'https://example.com/react-group.png',
+    isEnabled: false,
+  },
+  {
+    id: '2',
+    name: 'Mobile Developers',
+    icon: 'https://example.com/mobile-group.png',
+    isEnabled: false,
+  },
+  {
+    id: '3',
+    name: 'Weekend Runners',
+    icon: 'https://example.com/runners-group.png',
+    isEnabled: false,
+  },
+];
+
+const ChatListScreen = () => {
+  const [chatList, setChatList] = useState<ChatItem[]>(initialData);
+  const [searchQuery, setSearchQuery] = useState('');
   const dispatch = useDispatch();
-  const test = useSelector((state: RootState) => state.sampleReducer.test);
-  const [input, setInput] = useState('');
   const navigation = useNavigation();
 
+  const toggleSwitch = (id: string) => {
+    setChatList(prev =>
+      prev.map(item =>
+        item.id === id ? { ...item, isEnabled: !item.isEnabled } : item,
+      ),
+    );
+  };
+
+  const handleSelect = (chat: ChatItem) => {
+    dispatch(selectChat(chat));
+    //@ts-ignore
+    navigation.navigate('Chat');
+  };
+
+  const addNewChat = () => {
+    const newId = (chatList.length + 1).toString();
+    const newItem: ChatItem = {
+      id: newId,
+      name: `New Chat ${newId}`,
+      icon: 'https://example.com/default-icon.png',
+      isEnabled: false,
+    };
+    setChatList(prev => [...prev, newItem]);
+  };
+
+  const filteredChatList = useMemo(() => {
+    const lower = searchQuery.toLowerCase();
+    return chatList.filter(item => item.name.toLowerCase().includes(lower));
+  }, [searchQuery, chatList]);
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Redux Sample UI</Text>
-
-      <TextInput
-        style={styles.input}
-        placeholder="Enter text"
-        value={input}
-        onChangeText={setInput}
+    <SafeAreaView style={styles.screen}>
+      <HeaderWithSearch
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
+      <View style={styles.screen}>
+        <FlatList
+          data={filteredChatList}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => handleSelect(item)}>
+              <ChatListItem
+                name={item.name}
+                icon={item.icon}
+                isEnabled={item.isEnabled}
+                onToggle={() => toggleSwitch(item.id)}
+              />
+            </TouchableOpacity>
+          )}
+        />
 
-      <Button
-        title="Store Text"
-        onPress={() => dispatch(storeSampleText(input))}
-      />
-      <View style={styles.spacer} />
-      <Button
-        title="Reset Text"
-        onPress={() => {
-          dispatch(clearSampleReducerState());
-          setInput('');
-        }}
-      />
-
-      <Text style={styles.output}>Current Value: {test}</Text>
-
-      <Button
-        title="Go to Dummy Screen"
-        onPress={() => {
-          //@ts-ignore
-          navigation.navigate('Dummy');
-        }}
-      />
-    </View>
+        {/* Floating Add Button */}
+        <TouchableOpacity style={styles.fab} onPress={addNewChat}>
+          <Text style={styles.fabText}>＋</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
-}
+};
 
-export default SampleUI;
+export default ChatListScreen;
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
-    padding: 20,
-    justifyContent: 'center',
     backgroundColor: '#fff',
   },
-  title: {
-    fontSize: 24,
-    marginBottom: 20,
-    textAlign: 'center',
+  fab: {
+    position: 'absolute',
+    bottom: 30,
+    right: 20,
+    backgroundColor: '#007AFF',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 5, // for Android shadow
+    shadowColor: '#000', // for iOS shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
-  input: {
-    borderColor: '#999',
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 12,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-  },
-  spacer: {
-    height: 10,
-  },
-  output: {
-    marginTop: 20,
-    fontSize: 18,
-    textAlign: 'center',
+  fabText: {
+    color: '#fff',
+    fontSize: 30,
+    lineHeight: 32,
+    fontWeight: 'bold',
   },
 });
