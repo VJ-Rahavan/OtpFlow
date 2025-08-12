@@ -1,8 +1,6 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
-import SampleUI from './home/Home';
-import DummyUI from './sample/Sample';
 import { OnboardingOneScreen } from './onboarding/OnboardingOneScreen';
 import { OnboardingTwoScreen } from './onboarding/OnboardingTwoScreen';
 import { OnboardingThreeScreen } from './onboarding/OnboardingThreeScreen';
@@ -10,6 +8,10 @@ import { OnboardingFourScreen } from './onboarding/OnboardingFourScreen';
 import { NavigationConstants, RootStackParamList } from '../types/navigation';
 import { LoginScreen } from './login/LoginScreen';
 import { SingupScreen } from './signup/SignUpScreen';
+import ChatScreen from './ChatScreen/ChatScreen';
+import SettingsScreen from './Settings/SettingsScreen';
+import DummyUI from './sample/Sample';
+import SampleUI from './sample/ReduxHome';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -45,6 +47,14 @@ const AppNavigator = ({onboarded}: {onboarded:boolean}) => {
     {
       name: NavigationConstants.DUMMY,
       component: DummyUI,
+    },
+    {
+      name: 'Chat',
+      component: ChatScreen,
+    },
+    {
+      name: 'Settings',
+      component: SettingsScreen,
     },
     {
       name: NavigationConstants.HOME,

@@ -2,16 +2,18 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { persistReducer, persistStore } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import sampleReducer from './reducers/SampleReducer';
+import chatSlice from './reducers/ChatReducer';
 
 const rootReducer = combineReducers({
   sampleReducer: sampleReducer,
+  chatSlice: chatSlice,
 });
 
 const persistedReducer = persistReducer(
   {
     key: 'root',
     storage: AsyncStorage,
-    // blacklist: [], List of reducers to not to persist
+    blacklist: ['chatSlice'], //List of reducers to not to persist
   },
   rootReducer,
 );

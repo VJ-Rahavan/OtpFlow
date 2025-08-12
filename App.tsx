@@ -4,6 +4,7 @@ import { StyleProvider } from './src/screen/onboarding/hooks/styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
 import { StorageKey } from './src/utils/StorageKey';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -34,12 +35,14 @@ function App() {
   }
   
   return (
-    <StyleProvider>
+    <SafeAreaProvider style={styles.container}>
+      <StyleProvider>
       <View style={styles.container}>
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
         <Navigation onboarded={onboarded}/>
       </View>
     </StyleProvider>
+    </SafeAreaProvider>
   );
 }
 

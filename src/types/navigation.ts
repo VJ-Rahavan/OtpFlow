@@ -18,6 +18,9 @@ export type RootStackParamList = {
   [NavigationConstants.LOGIN]: undefined;
   [NavigationConstants.SIGNUP]: undefined;
   [NavigationConstants.DUMMY]: undefined;
+  [NavigationConstants.DUMMY]: undefined;
+  ['Chat']: undefined;
+  ['Settings']: undefined;
 };
 
 declare global {
