@@ -6,12 +6,13 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native';
-import ChatListItem from './ChatListItem';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import HeaderWithSearch from './Header';
 import { selectChat } from '../../redux/reducers/ChatReducer';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import { NavigationConstants } from '../../types/navigation';
+import ChatListItem from './ChatListItem';
+import HeaderWithSearch from './Header';
 
 type ChatItem = {
   id: string;
@@ -57,8 +58,7 @@ const ChatListScreen = () => {
 
   const handleSelect = (chat: ChatItem) => {
     dispatch(selectChat(chat));
-    //@ts-ignore
-    navigation.navigate('Chat');
+    navigation.navigate(NavigationConstants.CHAT);
   };
 
   const addNewChat = () => {

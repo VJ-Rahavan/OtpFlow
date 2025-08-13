@@ -11,7 +11,7 @@ import { SingupScreen } from './signup/SignUpScreen';
 import ChatScreen from './ChatScreen/ChatScreen';
 import SettingsScreen from './Settings/SettingsScreen';
 import DummyUI from './sample/Sample';
-import SampleUI from './sample/ReduxHome';
+import ChatListScreen from './Home/ChatListScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -49,16 +49,16 @@ const AppNavigator = ({onboarded}: {onboarded:boolean}) => {
       component: DummyUI,
     },
     {
-      name: 'Chat',
+      name: NavigationConstants.CHAT,
       component: ChatScreen,
     },
     {
-      name: 'Settings',
+      name: NavigationConstants.SETTINGS,
       component: SettingsScreen,
     },
     {
       name: NavigationConstants.HOME,
-      component: SampleUI,
+      component: ChatListScreen,
     },
   ];
   return (

@@ -1,3 +1,3 @@
 export const StorageKey = {
-    ONBOARDED: 'ONBOARDED3',
+    ONBOARDED: 'ONBOARDED4',
 }

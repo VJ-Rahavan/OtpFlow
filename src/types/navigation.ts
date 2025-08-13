@@ -7,6 +7,8 @@ export const NavigationConstants = {
   LOGIN: 'Login',
   SIGNUP: 'SignUp',
   DUMMY: 'Dummy',
+  SETTINGS: 'Settings',
+  CHAT: 'Chat',
 } as const;
 
 export type RootStackParamList = {
@@ -19,8 +21,8 @@ export type RootStackParamList = {
   [NavigationConstants.SIGNUP]: undefined;
   [NavigationConstants.DUMMY]: undefined;
   [NavigationConstants.DUMMY]: undefined;
-  ['Chat']: undefined;
-  ['Settings']: undefined;
+  [NavigationConstants.CHAT]: undefined;
+  [NavigationConstants.SETTINGS]: undefined;
 };
 
 declare global {
